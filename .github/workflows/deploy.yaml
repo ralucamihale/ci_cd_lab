@@ -1,13 +1,11 @@
 name: Build CI/CD
 
-# Trigger the workflow on a commit push to the `main` branch
 on:
   push:
     branches:
       - main
 
 jobs:
-  # Noul job pentru rularea testelor
   test:
     runs-on: ubuntu-latest
     steps:
@@ -22,65 +20,23 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
-      # TODO 01 rezolvat - Adăugarea pasului pentru rularea testelor
       - name: Run tests
         run: go test ./...
 
-  # Jobul pentru compilarea aplicației
   compile:
-    # TODO 02 rezolvat - Jobul `compile` are nevoie ca jobul `test` să se termine cu succes
     needs: test
-
-    # Specify the Os for the runner (container)
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-
+    runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository code into the runner
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Step 2: Set up Go environment with version 1.22
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
 
-      # Step 3: Download Go module dependencies
       - name: Install dependencies
         run: go mod download
 
-      # Step 4: Compile the Go application into a binary named 'myapp'
-      - name: Compile binary
-        run: go build -o myappname: Build CI/CD
-
-# Trigger the workflow on a commit push to the `main` branch
-on:
-  # Trigger the workflow on a commit push to the `main` branch
-  push:
-    branches:
-      - main
-
-jobs:
-  # Job to compile the application
-  compile:
-    # Specify the Os for the runner (container)
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-
-    steps:
-      # Step 1: Checkout the repository code into the runner
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Step 2: Set up Go environment with version 1.22
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-
-      # Step 3: Download Go module dependencies
-      - name: Install dependencies
-        run: go mod download
-
-      # Step 4: Compile the Go application into a binary named 'myapp'
       - name: Compile binary
         run: go build -o myapp
